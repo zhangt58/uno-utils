@@ -7,7 +7,7 @@ from ._thread import BaseThreadWorker
 from ._thread import execute_task
 
 
-__version__ = '0.0.1'
+__version__ = '0.1.0'
 __author__ = 'Tong Zhang <zhangt@frib.msu.edu>'
 __name__ = "uno_utils"
 __doc__ = """Utilities for uno development"""
