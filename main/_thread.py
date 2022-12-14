@@ -2,6 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import threading
+from typing import Callable
+
+
+def execute_task(fn: Callable):
+    """Execute the task on a new thread.
+    """
+    t = threading.Thread(target=fn)
+    t.daemon = True
+    t.start()
 
 
 class BaseThreadWorker(threading.Thread):
