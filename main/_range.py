@@ -24,12 +24,36 @@ class CalcRange:
         return self._range.getSpreadsheet()
 
     def offset(self, row=0, col=0):
-        """Return a new cell range after offset."""
+        """Return a new cell range of the same shape after offset."""
         oSheet = self.get_sheet()
         (_l, _t), (_r, _b) = self.leftTopIndex, self.rightBottomIndex
         return CalcRange(
             oSheet.getCellRangeByPosition(_l + col, _t + row, _r + col,
                                           _b + row))
+
+    def new_range(self, left_top_index=None, shape=None):
+        """Return a new cell range from the given left top index to the
+        given shape.
+
+        Parameters
+        ----------
+        left_top_index : tuple
+            A tuple of index of column and row as the starting cell
+            position, defaults to the same left top index as current CalcRange.
+        shape : tuple
+            A tuple of total number of rows and columns, defaults to the
+            same shape as curren CalcRange.
+        """
+        oSheet = self.get_sheet()
+        if left_top_index is None:
+            left_top_index = self.leftTopIndex
+        if shape is None:
+            shape = self.shape
+        _l, _t = left_top_index
+        nrow, ncol = shape
+        return CalcRange(
+                oSheet.getCellRangeByPosition(_l, _t,
+                    _l + ncol - 1, _t + nrow -1))
 
     @property
     def address(self):
