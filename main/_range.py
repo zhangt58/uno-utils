@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from com.sun.star.awt import FontWeight
 
 
 class CalcRange:
@@ -114,3 +115,9 @@ class CalcRange:
     @height.setter
     def height(self, i: int):
         self._range.Rows = i
+
+    def bold_font(self):
+        """Set font weight as bold.
+        """
+        self._range.CharWeight = FontWeight.BOLD
+
