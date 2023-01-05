@@ -3,6 +3,7 @@
 
 import numpy as np
 from com.sun.star.awt import FontWeight
+from com.sun.star.table import BorderLine2
 
 
 class CalcRange:
@@ -143,3 +144,13 @@ class CalcRange:
             setattr(self._range, k, v)
         else:
             super().__setattr__(k, v)
+
+    def set_border_line(self, position='bottom', color=0, lw=20, ls=0):
+        # ls: https://api.libreoffice.org/docs/idl/ref/namespacecom_1_1sun_1_1star_1_1table_1_1BorderLineStyle.html
+        # https://api.libreoffice.org/docs/idl/ref/structcom_1_1sun_1_1star_1_1table_1_1BorderLine2.html#details
+        bl = BorderLine2()
+        bl.Color = color
+        bl.LineWidth = lw
+        bl.LineStyle = ls
+        border_name = f'{position.capitalize()}Border'
+        setattr(self._range, border_name, bl)
