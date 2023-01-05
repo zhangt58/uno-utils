@@ -121,3 +121,8 @@ class CalcRange:
         """
         self._range.CharWeight = FontWeight.BOLD
 
+    def set_back_color(self, color=-1):
+        """Set background color.
+        """
+        self._range.CellBackColor = color
+
