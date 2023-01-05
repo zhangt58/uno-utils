@@ -6,6 +6,9 @@ from com.sun.star.awt import FontWeight
 
 
 class CalcRange:
+
+    _ATTRS = "_range", "_address", "address", "data", "width", "height"
+
     def __init__(self, range):
         self._range = range
         self.address = range
@@ -126,3 +129,17 @@ class CalcRange:
         """
         self._range.CellBackColor = color
 
+    def __getattribute__(self, k):
+        try:
+            return super().__getattribute__(k)
+        except AttributeError as init_err:
+            try:
+                return getattr(self._range, k)
+            except AttributeError:
+                raise init_err
+
+    def __setattr__(self, k, v):
+        if k not in self._ATTRS:
+            setattr(self._range, k, v)
+        else:
+            super().__setattr__(k, v)
