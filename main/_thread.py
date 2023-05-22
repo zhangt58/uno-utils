@@ -16,7 +16,7 @@ def execute_task(fn: Callable):
 class BaseThreadWorker(threading.Thread):
     def __init__(self, name=None):
         super().__init__()
-        self.daemon = True
+        self.daemon = False
         self.paused = True
         self.stopped = False
         self.state = threading.Condition()
@@ -48,7 +48,7 @@ class BaseThreadWorker(threading.Thread):
 
     def set_name(self, s):
         if s is None:
-            self._name = threading._newname()
+            self._name = threading._newname("_PyUnoThread_%d")
         else:
             self._name = s
 
