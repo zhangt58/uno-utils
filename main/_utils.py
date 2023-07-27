@@ -11,6 +11,7 @@ import aioca
 import asyncio
 import re
 import sys
+from functools import partial
 from datetime import datetime
 from uno_utils import BaseThreadWorker
 
@@ -99,13 +100,14 @@ class PVDataThread(BaseThreadWorker):
         BaseThreadWorker.stop(self)
         printlog(f"Thread ({self.name}) is stopped? {self.stopped}", file=self.fp)
 
+    async def mcb(self, pvname: str, value):
+        # printlog(f"{pvname} has a new value {value}", file=self.fp)
+        async with self.lock:
+            mdel = MDEL_DICT[pvname]
+            RESULT_POOL[pvname].updateValue(value, mdel)
+
     async def camonitor_coro(self, pvname: str):
-        async def _cb(value):
-            # printlog(f"{pvname} has a new value {value}", file=self.fp)
-            async with self.lock:
-                mdel = MDEL_DICT[pvname]
-                RESULT_POOL[pvname].updateValue(value, mdel)
-        return aioca.camonitor(pvname, _cb)
+        return aioca.camonitor(pvname, partial(self.mcb, pvname))
 
 
 class PVResult(unohelper.Base, XVolatileResult):
@@ -143,12 +145,14 @@ class PVResult(unohelper.Base, XVolatileResult):
                 return _emit
 
         if not _test_emit(self.pvvalue, value, mdel):
-            return
+            return False
 
         self.pvvalue = value
         event = self.getResult()
         for ilistener in self.listeners:
             ilistener.modified(event)
+
+        return True
 
 
 def printlog(s: str, file):
