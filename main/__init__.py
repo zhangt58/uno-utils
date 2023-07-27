@@ -5,6 +5,7 @@ from ._base import call_dispatch
 from ._range import CalcRange
 from ._thread import BaseThreadWorker
 from ._thread import execute_task
+from ._utils import PVDataThread, RESULT_POOL, MDEL_DICT
 
 
 __version__ = '0.1.0'
